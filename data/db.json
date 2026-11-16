@@ -1,0 +1,78 @@
+{
+  "memories": [
+    {
+      "id": "khushi-mem-video-1",
+      "kind": "video",
+      "url": "/assets/aistudio/v_a804cbbb.mp4",
+      "caption": "Happy Birthday Simran! A special video tribute filled with smiles, karate spirit, and joyful childhood memories.",
+      "authorName": "Family Tribute",
+      "relation": "Birthday Video",
+      "createdAt": "2026-11-16T08:00:00.000Z",
+      "hearts": 36,
+      "isFeatured": true
+    },
+    {
+      "id": "khushi-mem-photo-1",
+      "kind": "photo",
+      "url": "/assets/aistudio/b_f83e660f.png",
+      "caption": "Happy Birthday Khushi Mama — May all your dreams come true, stay happy always, you are so special!",
+      "authorName": "With Love",
+      "relation": "Birthday Card Collage",
+      "createdAt": "2026-11-16T07:45:00.000Z",
+      "hearts": 29,
+      "isFeatured": true
+    },
+    {
+      "id": "khushi-mem-photo-2",
+      "kind": "photo",
+      "url": "/assets/aistudio/a_6114bfb6.png",
+      "caption": "Happy Birthday Khushi Mama — Celebrating together with roses, candlelight, and birthday cake.",
+      "authorName": "Family Celebration",
+      "relation": "Special Portrait",
+      "createdAt": "2026-11-16T07:30:00.000Z",
+      "hearts": 27,
+      "isFeatured": true
+    },
+    {
+      "id": "khushi-mem-photo-3",
+      "kind": "photo",
+      "url": "/assets/aistudio/c_c4d675b7.png",
+      "caption": "From martial arts strength and creative projects to radiant smiles among the flowers.",
+      "authorName": "Shining Moments",
+      "relation": "Memory Collage",
+      "createdAt": "2026-11-16T07:15:00.000Z",
+      "hearts": 25,
+      "isFeatured": true
+    }
+  ],
+  "wishes": [
+    {
+      "id": "seed-wish-1",
+      "authorName": "Masi & Family",
+      "relation": "Your Loving Family",
+      "sticker": "🎂",
+      "message": "Happy Birthday, Simran! True to your name Khushi, you bring pure sunshine, warmth, and laughter into every room you enter. May your year ahead sparkle brighter than ever.",
+      "createdAt": "2026-11-16T08:15:00.000Z",
+      "hearts": 18,
+      "isPinned": true
+    },
+    {
+      "id": "seed-wish-2",
+      "authorName": "Little Nephews & Nieces",
+      "relation": "Your Biggest Fans",
+      "sticker": "🎈",
+      "message": "Happy Birthday Khushi Mama! Thank you for always making every weekend feel like a festival, telling the best stories, and sharing extra cake slices with us!",
+      "createdAt": "2026-11-16T07:45:00.000Z",
+      "hearts": 27
+    },
+    {
+      "id": "seed-wish-3",
+      "authorName": "Dadi & Dada Ji",
+      "relation": "Grandparents",
+      "sticker": "💐",
+      "message": "Endless blessings on 19th November, beta. May good health, wisdom, courage, and joyful milestones always walk beside you.",
+      "createdAt": "2026-11-16T07:10:00.000Z",
+      "hearts": 21
+    }
+  ]
+}

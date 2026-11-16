@@ -1,0 +1,6 @@
+{
+  "name": "Happy Birthday Simran (Khushi) — 19th November Party",
+  "description": "An interactive 3D birthday celebration, permanent family photo and video memories wall, and birthday guestbook for Simran (Khushi Mama) on 19th November.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --blush: #ffd1dc;
+    --blush-deep: #c25975;
+    --lavender: #e6e6fa;
+    --champagne: #f7e7ce;
+    --rose-gold: #e09f9d;
+    --cream: #fffdf9;
+    --plum: #2d242c;
+    --plum-soft: #5a4a58;
+    --gold: #d4af37;
+  }
+
+  body {
+    background-color: #fffdf9;
+    color: #2d242c;
+    font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(255, 209, 220, 0.45) 0%, transparent 42%),
+      radial-gradient(circle at 88% 24%, rgba(230, 230, 250, 0.5) 0%, transparent 44%),
+      radial-gradient(circle at 50% 62%, rgba(247, 231, 206, 0.45) 0%, transparent 48%),
+      radial-gradient(circle at 85% 88%, rgba(224, 159, 157, 0.3) 0%, transparent 45%);
+  }
+}
+
+.font-serif-display {
+  font-family: "Playfair Display", "Cormorant Garamond", Georgia, serif;
+  letter-spacing: -0.015em;
+}
+
+.font-fancy {
+  font-family: "Cinzel Decorative", "Playfair Display", Georgia, serif;
+  letter-spacing: 0.015em;
+}
+
+.font-editorial {
+  font-family: "Cormorant Garamond", Georgia, serif;
+}
+
+.font-script {
+  font-family: "Great Vibes", "Alex Brush", cursive;
+}
+
+.gold-foil {
+  background: linear-gradient(135deg, #996515 0%, #d4af37 32%, #f5d87a 52%, #b8860b 75%, #8a5a08 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: goldShimmer 4.5s linear infinite;
+}
+
+@keyframes goldShimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.fairy-bulb {
+  animation: twinkleBulb 2.2s ease-in-out infinite alternate;
+}
+
+@keyframes twinkleBulb {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.16);
+  }
+}
+
+.filter-original {
+  filter: none;
+}
+.filter-golden {
+  filter: sepia(0.2) saturate(1.25) contrast(1.04) brightness(1.03);
+}
+.filter-vintage {
+  filter: sepia(0.32) hue-rotate(-10deg) saturate(1.1) contrast(0.96) brightness(1.02);
+}
+.filter-dreamy {
+  filter: contrast(0.96) brightness(1.06) saturate(1.16);
+}
+
+.flip-card {
+  perspective: 1200px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner,
+.flip-card.is-flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gold-foil,
+  .fairy-bulb {
+    animation: none;
+  }
+  .flip-card-inner {
+    transition: none;
+  }
+}
