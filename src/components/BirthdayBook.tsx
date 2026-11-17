@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { Heart, Send, CheckCircle2, Pin } from 'lucide-react';
+import { Heart, Send, CheckCircle2, Pin, Pencil } from 'lucide-react';
 import { BirthdayWish } from '../types/birthday';
 
 interface BirthdayBookProps {
@@ -11,6 +11,15 @@ interface BirthdayBookProps {
     sticker: string;
     message: string;
   }) => Promise<void>;
+  onUpdateWish: (
+    id: string,
+    payload: {
+      authorName: string;
+      relation: string;
+      sticker: string;
+      message: string;
+    }
+  ) => Promise<void>;
   onHeartWish: (id: string) => Promise<void>;
 }
 
@@ -32,6 +41,7 @@ export function BirthdayBook({
   wishes,
   isLoading,
   onAddWish,
+  onUpdateWish,
   onHeartWish,
 }: BirthdayBookProps) {
   const [authorName, setAuthorName] = useState('');
@@ -41,6 +51,52 @@ export function BirthdayBook({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [savedBanner, setSavedBanner] = useState(false);
+
+  // Inline edit state for posted wishes
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editName, setEditName] = useState('');
+  const [editRelation, setEditRelation] = useState('');
+  const [editSticker, setEditSticker] = useState('🎂');
+  const [editMessage, setEditMessage] = useState('');
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
+  const [editError, setEditError] = useState<string | null>(null);
+
+  const startEditingWish = (wish: BirthdayWish) => {
+    setEditingId(wish.id);
+    setEditName(wish.authorName);
+    setEditRelation(wish.relation);
+    setEditSticker(wish.sticker);
+    setEditMessage(wish.message);
+    setEditError(null);
+  };
+
+  const cancelEditingWish = () => {
+    setEditingId(null);
+    setEditError(null);
+  };
+
+  const handleSaveWishEdit = async (e: FormEvent, id: string) => {
+    e.preventDefault();
+    if (!editName.trim() || !editMessage.trim()) {
+      setEditError('Please include both your name and birthday message.');
+      return;
+    }
+    setIsSavingEdit(true);
+    setEditError(null);
+    try {
+      await onUpdateWish(id, {
+        authorName: editName.trim(),
+        relation: editRelation.trim() || 'Family & Friends',
+        sticker: editSticker,
+        message: editMessage.trim(),
+      });
+      setEditingId(null);
+    } catch (err) {
+      setEditError(err instanceof Error ? err.message : 'Could not update wish right now.');
+    } finally {
+      setIsSavingEdit(false);
+    }
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -258,43 +314,131 @@ export function BirthdayBook({
                   : 'bg-white border-[#EFE1E6]'
               }`}
             >
-              <div>
-                {wish.isPinned && (
-                  <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#A67C2E] mb-2.5">
-                    <Pin className="w-3 h-3 fill-[#D4AF37] text-[#A67C2E]" />
-                    <span>Pinned Message</span>
+              {editingId === wish.id ? (
+                <form
+                  onSubmit={(e) => void handleSaveWishEdit(e, wish.id)}
+                  className="space-y-2.5 flex-1 flex flex-col justify-between"
+                >
+                  <div className="space-y-2.5">
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        type="text"
+                        value={editName}
+                        onChange={(e) => setEditName(e.target.value)}
+                        placeholder="Your Name"
+                        maxLength={80}
+                        aria-label="Edit sender name"
+                        className="w-full px-3 py-1.5 rounded-lg bg-[#FFFDF9] border border-[#E5D3DA] text-xs text-[#2D242C] focus:outline-none focus:border-[#C25975]"
+                      />
+                      <input
+                        type="text"
+                        value={editRelation}
+                        onChange={(e) => setEditRelation(e.target.value)}
+                        placeholder="Relation"
+                        maxLength={60}
+                        aria-label="Edit sender relation"
+                        className="w-full px-3 py-1.5 rounded-lg bg-[#FFFDF9] border border-[#E5D3DA] text-xs text-[#2D242C] focus:outline-none focus:border-[#C25975]"
+                      />
+                    </div>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {STICKERS.map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => setEditSticker(s)}
+                          className={`w-7 h-7 rounded-lg text-sm flex items-center justify-center border cursor-pointer ${
+                            editSticker === s
+                              ? 'bg-[#FFF0F4] border-[#C25975]'
+                              : 'bg-[#FFFDF9] border-[#E5D3DA]'
+                          }`}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                    <textarea
+                      rows={3}
+                      value={editMessage}
+                      onChange={(e) => setEditMessage(e.target.value)}
+                      placeholder="Edit your birthday wish..."
+                      maxLength={800}
+                      aria-label="Edit birthday message"
+                      className="w-full px-3 py-2 rounded-lg bg-[#FFFDF9] border border-[#E5D3DA] text-sm text-[#2D242C] focus:outline-none focus:border-[#C25975]"
+                    />
+                    {editError && (
+                      <p className="text-[11px] font-medium text-[#B91C1C]" role="alert">
+                        {editError}
+                      </p>
+                    )}
                   </div>
-                )}
-                <div className="flex items-start justify-between gap-3 mb-3">
+
+                  <div className="flex items-center justify-end gap-2 pt-2 border-t border-[#F4EAEF]">
+                    <button
+                      type="button"
+                      onClick={cancelEditingWish}
+                      className="px-3 py-1 rounded-lg border border-[#E5D3DA] text-xs font-medium text-[#5A4A58] hover:text-[#2D242C] cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSavingEdit}
+                      className="px-3.5 py-1 rounded-lg bg-[#C25975] text-white text-xs font-semibold hover:bg-[#A9445F] disabled:opacity-60 cursor-pointer"
+                    >
+                      {isSavingEdit ? 'Saving...' : 'Save'}
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <>
                   <div>
-                    <h4 className="font-serif-display text-lg font-bold text-[#2D242C]">
-                      {wish.authorName}
-                    </h4>
-                    <p className="text-xs text-[#5A4A58]">
-                      {wish.relation} &middot; {formatWishDate(wish.createdAt)}
+                    {wish.isPinned && (
+                      <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#A67C2E] mb-2.5">
+                        <Pin className="w-3 h-3 fill-[#D4AF37] text-[#A67C2E]" />
+                        <span>Pinned Message</span>
+                      </div>
+                    )}
+                    <div className="flex items-start justify-between gap-3 mb-3">
+                      <div>
+                        <h4 className="font-serif-display text-lg font-bold text-[#2D242C]">
+                          {wish.authorName}
+                        </h4>
+                        <p className="text-xs text-[#5A4A58]">
+                          {wish.relation} &middot; {formatWishDate(wish.createdAt)}
+                        </p>
+                      </div>
+                      <span className="text-2xl leading-none" aria-hidden="true">
+                        {wish.sticker}
+                      </span>
+                    </div>
+
+                    <p className="font-editorial text-lg text-[#2D242C] leading-relaxed">
+                      &ldquo;{wish.message}&rdquo;
                     </p>
                   </div>
-                  <span className="text-2xl leading-none" aria-hidden="true">
-                    {wish.sticker}
-                  </span>
-                </div>
 
-                <p className="font-editorial text-lg text-[#2D242C] leading-relaxed">
-                  &ldquo;{wish.message}&rdquo;
-                </p>
-              </div>
-
-              <div className="flex justify-end mt-5 pt-3 border-t border-[#F4EAEF]">
-                <button
-                  type="button"
-                  onClick={() => void onHeartWish(wish.id)}
-                  aria-label={`Celebrate wish from ${wish.authorName}`}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-[#FFF0F4] text-xs font-semibold text-[#C25975] transition-colors cursor-pointer tabular-nums"
-                >
-                  <Heart className="w-3.5 h-3.5 fill-[#C25975]" />
-                  <span>{wish.hearts}</span>
-                </button>
-              </div>
+                  <div className="flex items-center justify-end gap-1.5 mt-5 pt-3 border-t border-[#F4EAEF]">
+                    <button
+                      type="button"
+                      onClick={() => startEditingWish(wish)}
+                      aria-label={`Edit wish from ${wish.authorName}`}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-[#F6ECEF] text-xs font-medium text-[#5A4A58] hover:text-[#2D242C] transition-colors cursor-pointer"
+                    >
+                      <Pencil className="w-3 h-3" />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void onHeartWish(wish.id)}
+                      aria-label={`Celebrate wish from ${wish.authorName}`}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-[#FFF0F4] text-xs font-semibold text-[#C25975] transition-colors cursor-pointer tabular-nums"
+                    >
+                      <Heart className="w-3.5 h-3.5 fill-[#C25975]" />
+                      <span>{wish.hearts}</span>
+                    </button>
+                  </div>
+                </>
+              )}
             </article>
           ))}
         </div>

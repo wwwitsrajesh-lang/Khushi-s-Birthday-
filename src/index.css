@@ -118,10 +118,87 @@
   transform: rotateY(180deg);
 }
 
+.floating-balloon {
+  position: absolute;
+  bottom: -160px;
+  opacity: 0.72;
+  will-change: transform;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.balloon-sway-a {
+  animation-name: floatBalloonA;
+}
+
+.balloon-sway-b {
+  animation-name: floatBalloonB;
+}
+
+@keyframes floatBalloonA {
+  0% {
+    transform: translate3d(0, 10vh, 0) rotate(-3deg);
+  }
+  25% {
+    transform: translate3d(14px, -28vh, 0) rotate(3deg);
+  }
+  50% {
+    transform: translate3d(-10px, -64vh, 0) rotate(-2deg);
+  }
+  75% {
+    transform: translate3d(12px, -98vh, 0) rotate(3deg);
+  }
+  100% {
+    transform: translate3d(0, -135vh, 0) rotate(-3deg);
+  }
+}
+
+@keyframes floatBalloonB {
+  0% {
+    transform: translate3d(0, 10vh, 0) rotate(3deg);
+  }
+  25% {
+    transform: translate3d(-14px, -28vh, 0) rotate(-3deg);
+  }
+  50% {
+    transform: translate3d(10px, -64vh, 0) rotate(2deg);
+  }
+  75% {
+    transform: translate3d(-12px, -98vh, 0) rotate(-3deg);
+  }
+  100% {
+    transform: translate3d(0, -135vh, 0) rotate(3deg);
+  }
+}
+
+.floating-sparkle {
+  position: absolute;
+  will-change: transform, opacity;
+  animation: twinkleFloatSparkle 3.2s ease-in-out infinite;
+}
+
+@keyframes twinkleFloatSparkle {
+  0%,
+  100% {
+    opacity: 0.22;
+    transform: translate3d(0, 6px, 0) scale(0.7) rotate(0deg);
+  }
+  50% {
+    opacity: 0.85;
+    transform: translate3d(0, -8px, 0) scale(1.15) rotate(18deg);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .gold-foil,
-  .fairy-bulb {
+  .fairy-bulb,
+  .floating-balloon,
+  .floating-sparkle {
     animation: none;
+  }
+  .floating-balloon {
+    bottom: 12vh;
+    opacity: 0.4;
   }
   .flip-card-inner {
     transition: none;

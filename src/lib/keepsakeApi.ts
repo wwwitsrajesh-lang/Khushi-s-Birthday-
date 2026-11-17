@@ -458,3 +458,142 @@ export async function heartWishItem(id: string): Promise<BirthdayWish | null> {
     isPinned: Boolean(updated.is_pinned),
   };
 }
+
+export async function updateMemoryItem(id: string, formData: FormData): Promise<MemoryItem> {
+  if (apiBackendAvailable !== false) {
+    try {
+      const res = await fetch(`/api/memories/${encodeURIComponent(id)}`, {
+        method: 'PATCH',
+        body: formData,
+      });
+      const data = await tryParseJson<{ memory?: MemoryItem; error?: string }>(res);
+      if (res.ok && data?.memory) {
+        apiBackendAvailable = true;
+        return data.memory;
+      }
+      if (data?.error) {
+        throw new Error(data.error);
+      }
+      apiBackendAvailable = false;
+    } catch (err) {
+      if (err instanceof Error && !/json|fetch|network/i.test(err.message)) {
+        throw err;
+      }
+      apiBackendAvailable = false;
+    }
+  }
+
+  const authorName = String(formData.get('authorName') || '').trim() || 'Family & Friends';
+  const relation = String(formData.get('relation') || '').trim() || 'Birthday Guest';
+  const caption =
+    String(formData.get('caption') || '').trim() ||
+    'A permanent birthday memory for Simran (Khushi).';
+
+  const patch: Record<string, unknown> = {
+    author_name: authorName,
+    relation,
+    caption,
+  };
+
+  const file = formData.get('media');
+  if (file instanceof File) {
+    const ext =
+      (file.name.split('.').pop() || 'bin').replace(/[^a-z0-9]/gi, '').toLowerCase() || 'bin';
+    const storagePath = `uploads/${Date.now()}-${Math.random().toString(36).slice(2, 10)}.${ext}`;
+    const { error: uploadErr } = await supabase.storage
+      .from(SUPABASE_BUCKET)
+      .upload(storagePath, file, { contentType: file.type || 'application/octet-stream' });
+
+    if (uploadErr) {
+      throw new Error('Could not upload replacement photo or video.');
+    }
+
+    patch.url = supabase.storage.from(SUPABASE_BUCKET).getPublicUrl(storagePath).data.publicUrl;
+    patch.storage_path = storagePath;
+    patch.kind = file.type.startsWith('video/') ? 'video' : 'photo';
+  }
+
+  const { data: updated, error } = await supabase
+    .from('memories')
+    .update(patch)
+    .eq('id', id)
+    .select()
+    .maybeSingle();
+
+  if (error || !updated) {
+    throw new Error('Could not update memory right now.');
+  }
+
+  return {
+    id: updated.id,
+    kind: updated.kind,
+    url: updated.url,
+    caption: updated.caption,
+    authorName: updated.author_name,
+    relation: updated.relation,
+    createdAt: updated.created_at,
+    hearts: Number(updated.hearts || 0),
+    isFeatured: Boolean(updated.is_featured),
+  };
+}
+
+export async function updateWishItem(
+  id: string,
+  payload: {
+    authorName: string;
+    relation: string;
+    sticker: string;
+    message: string;
+  }
+): Promise<BirthdayWish> {
+  if (apiBackendAvailable !== false) {
+    try {
+      const res = await fetch(`/api/wishes/${encodeURIComponent(id)}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await tryParseJson<{ wish?: BirthdayWish; error?: string }>(res);
+      if (res.ok && data?.wish) {
+        apiBackendAvailable = true;
+        return data.wish;
+      }
+      if (data?.error) {
+        throw new Error(data.error);
+      }
+      apiBackendAvailable = false;
+    } catch (err) {
+      if (err instanceof Error && !/json|fetch|network/i.test(err.message)) {
+        throw err;
+      }
+      apiBackendAvailable = false;
+    }
+  }
+
+  const { data: updated, error } = await supabase
+    .from('wishes')
+    .update({
+      author_name: payload.authorName,
+      relation: payload.relation,
+      sticker: payload.sticker,
+      message: payload.message,
+    })
+    .eq('id', id)
+    .select()
+    .maybeSingle();
+
+  if (error || !updated) {
+    throw new Error('Could not update birthday message right now.');
+  }
+
+  return {
+    id: updated.id,
+    authorName: updated.author_name,
+    relation: updated.relation,
+    sticker: updated.sticker,
+    message: updated.message,
+    createdAt: updated.created_at,
+    hearts: Number(updated.hearts || 0),
+    isPinned: Boolean(updated.is_pinned),
+  };
+}

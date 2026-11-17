@@ -15,6 +15,8 @@ import {
   saveWishToSupabase,
   sortWishes,
   syncLocalSeedToSupabase,
+  updateMemoryInSupabase,
+  updateWishInSupabase,
   WishRecord,
 } from './server/supabase.ts';
 
@@ -298,6 +300,62 @@ async function startServer() {
     res.json({ memory: target });
   });
 
+  // PATCH existing memory (caption, author, relation, and/or replacement photo/video)
+  app.patch('/api/memories/:id', upload.single('media'), async (req, res) => {
+    try {
+      const { id } = req.params;
+      const file = req.file;
+      const authorName = String(req.body.authorName || '').trim().slice(0, 80) || 'Family & Friends';
+      const relation = String(req.body.relation || '').trim().slice(0, 60) || 'Birthday Guest';
+      const caption =
+        String(req.body.caption || '').trim().slice(0, 320) ||
+        'A permanent birthday memory for Simran (Khushi).';
+      const kind: 'photo' | 'video' | undefined = file
+        ? file.mimetype.startsWith('video/')
+          ? 'video'
+          : 'photo'
+        : undefined;
+
+      const remoteUpdated = await updateMemoryInSupabase(id, {
+        caption,
+        authorName,
+        relation,
+        filePath: file?.path,
+        filename: file?.filename,
+        mimeType: file?.mimetype,
+        kind,
+      });
+
+      if (remoteUpdated) {
+        if (file) {
+          fs.promises.unlink(file.path).catch(() => {});
+        }
+        res.json({ memory: remoteUpdated });
+        return;
+      }
+
+      const db = readDb();
+      const target = db.memories.find((m) => m.id === id);
+      if (!target) {
+        res.status(404).json({ error: 'Memory not found.' });
+        return;
+      }
+
+      target.authorName = authorName;
+      target.relation = relation;
+      target.caption = caption;
+      if (file && kind) {
+        target.url = `/uploads/${file.filename}`;
+        target.kind = kind;
+      }
+      writeDb(db);
+      res.json({ memory: target });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unable to update memory.';
+      res.status(500).json({ error: message });
+    }
+  });
+
   // GET all permanent birthday wishes from Supabase (fallback to local db)
   app.get('/api/wishes', async (_req, res) => {
     const localDb = readDb();
@@ -360,6 +418,45 @@ async function startServer() {
       return;
     }
     target.hearts += 1;
+    writeDb(db);
+    res.json({ wish: target });
+  });
+
+  // PATCH existing birthday wish
+  app.patch('/api/wishes/:id', async (req, res) => {
+    const { id } = req.params;
+    const authorName = String(req.body?.authorName || '').trim().slice(0, 80);
+    const relation = String(req.body?.relation || '').trim().slice(0, 60) || 'Family & Friends';
+    const sticker = String(req.body?.sticker || '🎂').trim().slice(0, 8) || '🎂';
+    const message = String(req.body?.message || '').trim().slice(0, 800);
+
+    if (!authorName || !message) {
+      res.status(400).json({ error: 'Please include both your name and a birthday message.' });
+      return;
+    }
+
+    const remoteUpdated = await updateWishInSupabase(id, {
+      authorName,
+      relation,
+      sticker,
+      message,
+    });
+    if (remoteUpdated) {
+      res.json({ wish: remoteUpdated });
+      return;
+    }
+
+    const db = readDb();
+    const target = db.wishes.find((w) => w.id === id);
+    if (!target) {
+      res.status(404).json({ error: 'Wish not found.' });
+      return;
+    }
+    target.authorName = authorName;
+    target.relation = relation;
+    target.sticker = sticker;
+    target.message = message;
+    db.wishes = sortWishes(db.wishes);
     writeDb(db);
     res.json({ wish: target });
   });

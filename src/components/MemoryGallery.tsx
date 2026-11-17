@@ -10,6 +10,7 @@ import {
   Play,
   SlidersHorizontal,
   CheckCircle2,
+  Pencil,
 } from 'lucide-react';
 import { MemoryItem, PhotoFilter } from '../types/birthday';
 import { birthdayAudio } from '../utils/audio';
@@ -18,6 +19,7 @@ interface MemoryGalleryProps {
   memories: MemoryItem[];
   isLoading: boolean;
   onUploadMemory: (formData: FormData) => Promise<void>;
+  onUpdateMemory: (id: string, formData: FormData) => Promise<void>;
   onHeartMemory: (id: string) => Promise<void>;
   externalUploadTriggerRef?: React.MutableRefObject<(() => void) | null>;
 }
@@ -47,6 +49,7 @@ export function MemoryGallery({
   memories,
   isLoading,
   onUploadMemory,
+  onUpdateMemory,
   onHeartMemory,
   externalUploadTriggerRef,
 }: MemoryGalleryProps) {
@@ -70,6 +73,59 @@ export function MemoryGallery({
   const [brokenIds, setBrokenIds] = useState<Record<string, boolean>>({});
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const uploadSectionRef = useRef<HTMLDivElement | null>(null);
+
+  // Inline card edit state
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editAuthor, setEditAuthor] = useState('');
+  const [editRelation, setEditRelation] = useState('');
+  const [editCaption, setEditCaption] = useState('');
+  const [editFile, setEditFile] = useState<File | null>(null);
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
+  const [editError, setEditError] = useState<string | null>(null);
+
+  const startEditing = (item: MemoryItem) => {
+    setEditingId(item.id);
+    setEditAuthor(item.authorName);
+    setEditRelation(item.relation);
+    setEditCaption(item.caption);
+    setEditFile(null);
+    setEditError(null);
+  };
+
+  const cancelEditing = () => {
+    setEditingId(null);
+    setEditFile(null);
+    setEditError(null);
+  };
+
+  const handleSaveEdit = async (e: FormEvent, id: string) => {
+    e.preventDefault();
+    if (!editCaption.trim()) {
+      setEditError('Please enter a caption or story for this memory.');
+      return;
+    }
+    setIsSavingEdit(true);
+    setEditError(null);
+    try {
+      const fd = new FormData();
+      fd.append('authorName', editAuthor.trim() || 'Family & Friends');
+      fd.append('relation', editRelation.trim() || 'Birthday Guest');
+      fd.append('caption', editCaption.trim());
+      if (editFile) {
+        fd.append('media', editFile);
+      }
+      await onUpdateMemory(id, fd);
+      if (editFile) {
+        setBrokenIds((prev) => ({ ...prev, [id]: false }));
+      }
+      setEditingId(null);
+      setEditFile(null);
+    } catch (err) {
+      setEditError(err instanceof Error ? err.message : 'Unable to save changes right now.');
+    } finally {
+      setIsSavingEdit(false);
+    }
+  };
 
   useEffect(() => {
     if (externalUploadTriggerRef) {
@@ -519,33 +575,122 @@ export function MemoryGallery({
                     )}
                   </button>
 
-                  {/* Clean unboxed metadata row (zero-pill discipline) */}
-                  <div className="flex items-center gap-2 text-xs text-[#5A4A58] mt-3 px-1">
-                    <span className="font-semibold text-[#C25975]">
-                      {item.kind === 'video' ? 'Video' : 'Photo'}
-                    </span>
-                    <span aria-hidden="true">&middot;</span>
-                    <span className="truncate">{item.authorName}</span>
-                    <span aria-hidden="true">&middot;</span>
-                    <span className="shrink-0">{formatDateLabel(item.createdAt)}</span>
-                  </div>
+                  {editingId === item.id ? (
+                    <form
+                      onSubmit={(e) => void handleSaveEdit(e, item.id)}
+                      className="mt-3 pt-3 border-t border-[#EFE1E6] space-y-2.5 px-1"
+                    >
+                      <div className="grid grid-cols-2 gap-2">
+                        <input
+                          type="text"
+                          value={editAuthor}
+                          onChange={(e) => setEditAuthor(e.target.value)}
+                          placeholder="Your Name"
+                          maxLength={80}
+                          aria-label="Edit author name"
+                          className="w-full px-3 py-1.5 rounded-lg bg-[#FFFDF9] border border-[#E5D3DA] text-xs text-[#2D242C] focus:outline-none focus:border-[#C25975]"
+                        />
+                        <input
+                          type="text"
+                          value={editRelation}
+                          onChange={(e) => setEditRelation(e.target.value)}
+                          placeholder="Relation"
+                          maxLength={60}
+                          aria-label="Edit relation"
+                          className="w-full px-3 py-1.5 rounded-lg bg-[#FFFDF9] border border-[#E5D3DA] text-xs text-[#2D242C] focus:outline-none focus:border-[#C25975]"
+                        />
+                      </div>
+                      <textarea
+                        rows={2}
+                        value={editCaption}
+                        onChange={(e) => setEditCaption(e.target.value)}
+                        placeholder="Edit memory caption..."
+                        maxLength={320}
+                        aria-label="Edit memory caption"
+                        className="w-full px-3 py-1.5 rounded-lg bg-[#FFFDF9] border border-[#E5D3DA] text-xs text-[#2D242C] focus:outline-none focus:border-[#C25975]"
+                      />
+                      <div className="flex items-center justify-between gap-2">
+                        <label className="text-[11px] font-semibold text-[#C25975] hover:text-[#A9445F] cursor-pointer truncate">
+                          <span>
+                            {editFile ? `New file: ${editFile.name}` : 'Replace photo/video (optional)'}
+                          </span>
+                          <input
+                            type="file"
+                            accept="image/*,video/*"
+                            onChange={(e) => {
+                              const picked = e.target.files?.[0];
+                              if (picked) setEditFile(picked);
+                            }}
+                            className="sr-only"
+                          />
+                        </label>
+                      </div>
+                      {editError && (
+                        <p className="text-[11px] font-medium text-[#B91C1C]" role="alert">
+                          {editError}
+                        </p>
+                      )}
+                      <div className="flex items-center justify-end gap-2 pt-1">
+                        <button
+                          type="button"
+                          onClick={cancelEditing}
+                          className="px-3 py-1 rounded-lg border border-[#E5D3DA] text-xs font-medium text-[#5A4A58] hover:text-[#2D242C] cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={isSavingEdit}
+                          className="px-3.5 py-1 rounded-lg bg-[#C25975] text-white text-xs font-semibold hover:bg-[#A9445F] disabled:opacity-60 cursor-pointer"
+                        >
+                          {isSavingEdit ? 'Saving...' : 'Save'}
+                        </button>
+                      </div>
+                    </form>
+                  ) : (
+                    <>
+                      {/* Clean unboxed metadata row (zero-pill discipline) */}
+                      <div className="flex items-center gap-2 text-xs text-[#5A4A58] mt-3 px-1">
+                        <span className="font-semibold text-[#C25975]">
+                          {item.kind === 'video' ? 'Video' : 'Photo'}
+                        </span>
+                        <span aria-hidden="true">&middot;</span>
+                        <span className="truncate">{item.authorName}</span>
+                        <span aria-hidden="true">&middot;</span>
+                        <span className="shrink-0">{formatDateLabel(item.createdAt)}</span>
+                      </div>
 
-                  <p className="text-sm text-[#2D242C] leading-relaxed mt-1.5 px-1">
-                    {item.caption}
-                  </p>
+                      <p className="text-sm text-[#2D242C] leading-relaxed mt-1.5 px-1">
+                        {item.caption}
+                      </p>
+                    </>
+                  )}
                 </div>
 
-                <div className="flex items-center justify-between mt-4 pt-3 border-t border-[#F4EAEF] px-1">
+                <div className="flex items-center justify-between gap-2 mt-4 pt-3 border-t border-[#F4EAEF] px-1">
                   <span className="text-xs text-[#5A4A58] truncate">{item.relation}</span>
-                  <button
-                    type="button"
-                    onClick={() => void onHeartMemory(item.id)}
-                    aria-label={`Send heart to memory by ${item.authorName}`}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-[#FFF0F4] text-xs font-semibold text-[#C25975] transition-colors cursor-pointer tabular-nums"
-                  >
-                    <Heart className="w-3.5 h-3.5 fill-[#C25975]" />
-                    <span>{item.hearts}</span>
-                  </button>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        editingId === item.id ? cancelEditing() : startEditing(item)
+                      }
+                      aria-label={`Edit memory by ${item.authorName}`}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-[#F6ECEF] text-xs font-medium text-[#5A4A58] hover:text-[#2D242C] transition-colors cursor-pointer"
+                    >
+                      <Pencil className="w-3 h-3" />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void onHeartMemory(item.id)}
+                      aria-label={`Send heart to memory by ${item.authorName}`}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-[#FFF0F4] text-xs font-semibold text-[#C25975] transition-colors cursor-pointer tabular-nums"
+                    >
+                      <Heart className="w-3.5 h-3.5 fill-[#C25975]" />
+                      <span>{item.hearts}</span>
+                    </button>
+                  </div>
                 </div>
               </article>
             );

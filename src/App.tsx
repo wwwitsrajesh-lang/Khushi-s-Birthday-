@@ -5,6 +5,7 @@ import { BirthdayStage3D } from './components/BirthdayStage3D';
 import { BirthdaySurprises } from './components/BirthdaySurprises';
 import { ConfettiCanvas, ConfettiHandle } from './components/ConfettiCanvas';
 import { EntranceOverlay } from './components/EntranceOverlay';
+import { FloatingPartyBackdrop } from './components/FloatingPartyBackdrop';
 import { MemoryGallery } from './components/MemoryGallery';
 import { BirthdayWish, MemoryItem } from './types/birthday';
 import { birthdayAudio } from './utils/audio';
@@ -15,6 +16,8 @@ import {
   loadWishes,
   postWishItem,
   sortWishes,
+  updateMemoryItem,
+  updateWishItem,
   uploadMemoryItem,
 } from './lib/keepsakeApi';
 
@@ -201,8 +204,31 @@ export default function App() {
     );
   };
 
+  const handleUpdateMemory = async (id: string, formData: FormData) => {
+    const updated = await updateMemoryItem(id, formData);
+    setMemories((prev) => prev.map((item) => (item.id === id ? updated : item)));
+    showToast('Memory updated permanently!');
+  };
+
+  const handleUpdateWish = async (
+    id: string,
+    payload: {
+      authorName: string;
+      relation: string;
+      sticker: string;
+      message: string;
+    }
+  ) => {
+    const updated = await updateWishItem(id, payload);
+    setWishes((prev) =>
+      sortWishes(prev.map((item) => (item.id === id ? updated : item)))
+    );
+    showToast('Birthday wish updated!');
+  };
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative">
+      <FloatingPartyBackdrop />
       <ConfettiCanvas ref={confettiRef} />
       <EntranceOverlay visible={showEntrance} onEnter={handleEnterParty} />
 
@@ -388,6 +414,7 @@ export default function App() {
           memories={memories}
           isLoading={memoriesLoading}
           onUploadMemory={handleUploadMemory}
+          onUpdateMemory={handleUpdateMemory}
           onHeartMemory={handleHeartMemory}
           externalUploadTriggerRef={uploadTriggerRef}
         />
@@ -400,6 +427,7 @@ export default function App() {
           wishes={wishes}
           isLoading={wishesLoading}
           onAddWish={handleAddWish}
+          onUpdateWish={handleUpdateWish}
           onHeartWish={handleHeartWish}
         />
       </main>

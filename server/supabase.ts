@@ -390,3 +390,91 @@ export async function incrementWishHeartInSupabase(id: string): Promise<WishReco
   if (updateErr || !updated) return null;
   return mapWishRow(updated as SupabaseWishRow);
 }
+
+export async function updateMemoryInSupabase(
+  id: string,
+  params: {
+    caption: string;
+    authorName: string;
+    relation: string;
+    filePath?: string;
+    filename?: string;
+    mimeType?: string;
+    kind?: 'photo' | 'video';
+  }
+): Promise<MemoryRecord | null> {
+  const sb = getSupabaseClient();
+  const patch: Record<string, unknown> = {
+    caption: params.caption,
+    author_name: params.authorName,
+    relation: params.relation,
+  };
+
+  if (params.filePath && params.filename && params.mimeType && params.kind) {
+    const storagePath = `uploads/${params.filename}`;
+    const fileBuffer = fs.readFileSync(params.filePath);
+    const { error: storageErr } = await sb.storage
+      .from(SUPABASE_BUCKET)
+      .upload(storagePath, fileBuffer, {
+        contentType: params.mimeType,
+        upsert: false,
+      });
+
+    if (storageErr) {
+      console.warn('Supabase replacement media upload warning:', storageErr.message);
+      return null;
+    }
+
+    patch.url = sb.storage.from(SUPABASE_BUCKET).getPublicUrl(storagePath).data.publicUrl;
+    patch.storage_path = storagePath;
+    patch.kind = params.kind;
+  }
+
+  const { data, error } = await sb
+    .from('memories')
+    .update(patch)
+    .eq('id', id)
+    .select()
+    .maybeSingle();
+
+  if (error || !data) {
+    if (!isMissingTableError(error) && error) {
+      console.warn('Supabase update memory error:', error.message);
+    }
+    return null;
+  }
+
+  return mapMemoryRow(data as SupabaseMemoryRow);
+}
+
+export async function updateWishInSupabase(
+  id: string,
+  params: {
+    authorName: string;
+    relation: string;
+    sticker: string;
+    message: string;
+  }
+): Promise<WishRecord | null> {
+  const sb = getSupabaseClient();
+  const { data, error } = await sb
+    .from('wishes')
+    .update({
+      author_name: params.authorName,
+      relation: params.relation,
+      sticker: params.sticker,
+      message: params.message,
+    })
+    .eq('id', id)
+    .select()
+    .maybeSingle();
+
+  if (error || !data) {
+    if (!isMissingTableError(error) && error) {
+      console.warn('Supabase update wish error:', error.message);
+    }
+    return null;
+  }
+
+  return mapWishRow(data as SupabaseWishRow);
+}
