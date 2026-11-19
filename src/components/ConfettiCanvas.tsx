@@ -20,13 +20,13 @@ interface Particle {
 }
 
 const PARTY_COLORS = [
-  '#FFD1DC',
-  '#D4AF37',
-  '#F48FB1',
-  '#E6E6FA',
-  '#E09F9D',
-  '#F7E7CE',
-  '#C25975',
+  '#FF3B9A',
+  '#FFD84D',
+  '#5BE3F5',
+  '#C78BFF',
+  '#FF85C2',
+  '#FF9F43',
+  '#EC2C88',
 ];
 
 export const ConfettiCanvas = forwardRef<ConfettiHandle>(function ConfettiCanvas(_props, ref) {

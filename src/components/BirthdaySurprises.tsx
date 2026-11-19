@@ -13,26 +13,26 @@ const SCRATCH_CARDS: ScratchCardItem[] = [
   {
     id: 'scratch-1',
     label: 'Surprise 01',
-    title: 'A Year of Pure Khushi',
+    title: 'A Magical Year 11 of Khushi',
     blessing:
-      'May every morning of this new year greet you with warm sunlight, unexpected laughter, and proud milestones.',
-    surfaceTint: '#FFD1DC',
+      'May age 11 bring you giant giggles, awesome adventures, shining school days, and sweet surprises around every corner!',
+    surfaceTint: '#FFE8F4',
   },
   {
     id: 'scratch-2',
     label: 'Surprise 02',
-    title: 'Khushi Mama Treat Coupon',
+    title: 'Princess Treat & Ice Cream Pass',
     blessing:
-      'Redeemable anytime for your favorite dessert outing, extra family hugs, and an evening movie night of your choice!',
-    surfaceTint: '#E6E6FA',
+      'Redeemable anytime for your favorite ice cream sundae, extra family hugs, and a cozy movie night where you pick the movie!',
+    surfaceTint: '#F3EBFF',
   },
   {
     id: 'scratch-3',
     label: 'Surprise 03',
-    title: 'Unstoppable Courage & Joy',
+    title: 'Superstar Dreams Come True',
     blessing:
-      'Whatever dream you chase next, your whole family is cheering louder than anyone in your corner.',
-    surfaceTint: '#F7E7CE',
+      'Keep dreaming big, painting bright, and sparkling boldly—your whole family is your #1 fan club forever!',
+    surfaceTint: '#FFF7DC',
   },
 ];
 
@@ -51,45 +51,45 @@ const ADORE_CARDS: FlipCardItem[] = [
   {
     id: 'adore-1',
     number: '01',
-    frontTitle: 'Your Radiant Smile',
-    frontSubtitle: 'Sunshine of every gathering',
+    frontTitle: 'Our Birthday Princess',
+    frontSubtitle: 'Sparkle of every room',
     backText:
-      'You walk into any room and instantly brighten the mood—your laughter is contagious to everyone around you.',
-    gradientClass: 'from-[#FFF1F5] via-[#FFE2EB] to-[#FCE2D8]',
-    accentColor: '#C25975',
+      'You walk into any room and light it up like fairy lights—your giggles and radiant smile make everyone’s day brighter!',
+    gradientClass: 'from-[#FFEAF5] via-[#FFD8EC] to-[#FFF2DA]',
+    accentColor: '#D81E78',
     crestKind: 'crown',
   },
   {
     id: 'adore-2',
     number: '02',
-    frontTitle: 'Best Khushi Mama',
-    frontSubtitle: 'Sweetest stories & treats',
+    frontTitle: 'Sweetest Khushi Mama',
+    frontSubtitle: 'Best stories & fun times',
     backText:
-      'Always patient, endlessly playful, and the secret keeper of all the best family adventures and treats.',
-    gradientClass: 'from-[#F7F2FF] via-[#EDE6FA] to-[#FFE8F1]',
-    accentColor: '#7C5A9E',
+      'So playful, creative, and full of fun ideas—every family game, craft, and treat is ten times better with you!',
+    gradientClass: 'from-[#F5ECFF] via-[#E8D8FF] to-[#FFEAF5]',
+    accentColor: '#7C3AED',
     crestKind: 'cake',
   },
   {
     id: 'adore-3',
     number: '03',
-    frontTitle: 'Warmest Heart',
-    frontSubtitle: 'Kindness in every detail',
+    frontTitle: 'Kindest Big Heart',
+    frontSubtitle: 'Caring in every little way',
     backText:
-      'You remember the small details that make people feel deeply seen, cared for, and celebrated.',
-    gradientClass: 'from-[#FFF9EC] via-[#F7E7CE] to-[#FFE7EE]',
-    accentColor: '#A67C2E',
+      'At 11 years old you already have the sweetest, most caring heart—always making everyone around you feel loved.',
+    gradientClass: 'from-[#E9FBFF] via-[#D4F6FD] to-[#F5ECFF]',
+    accentColor: '#0E7C90',
     crestKind: 'peony',
   },
   {
     id: 'adore-4',
     number: '04',
-    frontTitle: '19th November Star',
-    frontSubtitle: 'Our brightest celebration',
+    frontTitle: '20th November Star',
+    frontSubtitle: 'Turning 11 in style!',
     backText:
-      'Every November 19th reminds us how lucky our home is to celebrate another chapter of your wonderful life.',
-    gradientClass: 'from-[#FFF3EE] via-[#FCE0D8] to-[#F7E7CE]',
-    accentColor: '#B85C56',
+      'Every November 20th reminds us how lucky our home is to celebrate our shining star Simran growing brighter every year!',
+    gradientClass: 'from-[#FFF9DF] via-[#FFECB8] to-[#FFE6F2]',
+    accentColor: '#B45309',
     crestKind: 'candle',
   },
 ];
@@ -98,65 +98,65 @@ function CoverCrest({ kind, accent }: { kind: FlipCardItem['crestKind']; accent:
   if (kind === 'crown') {
     return (
       <svg viewBox="0 0 64 64" className="w-12 h-12" fill="none" aria-hidden="true">
-        <circle cx="32" cy="32" r="28" stroke="#D4AF37" strokeOpacity="0.45" strokeWidth="1.2" strokeDasharray="3 3" />
+        <circle cx="32" cy="32" r="28" stroke="#F5B82E" strokeOpacity="0.6" strokeWidth="1.4" strokeDasharray="3 3" />
         <path
           d="M16 40L19 23L27.5 31L32 19L36.5 31L45 23L48 40H16Z"
           fill={accent}
-          fillOpacity="0.16"
+          fillOpacity="0.18"
           stroke={accent}
-          strokeWidth="1.8"
+          strokeWidth="1.9"
           strokeLinejoin="round"
         />
-        <rect x="16" y="42" width="32" height="4" rx="2" fill="#D4AF37" />
-        <circle cx="32" cy="17" r="2.2" fill="#D4AF37" />
-        <circle cx="19" cy="21" r="1.8" fill="#D4AF37" />
-        <circle cx="45" cy="21" r="1.8" fill="#D4AF37" />
+        <rect x="16" y="42" width="32" height="4" rx="2" fill="#F5B82E" />
+        <circle cx="32" cy="17" r="2.4" fill="#F5B82E" />
+        <circle cx="19" cy="21" r="2" fill="#FF4FA6" />
+        <circle cx="45" cy="21" r="2" fill="#FF4FA6" />
       </svg>
     );
   }
   if (kind === 'cake') {
     return (
       <svg viewBox="0 0 64 64" className="w-12 h-12" fill="none" aria-hidden="true">
-        <circle cx="32" cy="32" r="28" stroke="#D4AF37" strokeOpacity="0.45" strokeWidth="1.2" strokeDasharray="3 3" />
-        <rect x="17" y="34" width="30" height="12" rx="3" fill={accent} fillOpacity="0.16" stroke={accent} strokeWidth="1.8" />
-        <rect x="22" y="25" width="20" height="9" rx="2.5" fill="#D4AF37" fillOpacity="0.22" stroke="#D4AF37" strokeWidth="1.5" />
-        <line x1="27" y1="18" x2="27" y2="25" stroke={accent} strokeWidth="1.8" strokeLinecap="round" />
-        <line x1="37" y1="18" x2="37" y2="25" stroke={accent} strokeWidth="1.8" strokeLinecap="round" />
-        <circle cx="27" cy="15" r="2" fill="#D4AF37" />
-        <circle cx="37" cy="15" r="2" fill="#D4AF37" />
-        <path d="M13 46H51" stroke={accent} strokeWidth="1.8" strokeLinecap="round" />
+        <circle cx="32" cy="32" r="28" stroke="#F5B82E" strokeOpacity="0.6" strokeWidth="1.4" strokeDasharray="3 3" />
+        <rect x="17" y="34" width="30" height="12" rx="3" fill={accent} fillOpacity="0.18" stroke={accent} strokeWidth="1.9" />
+        <rect x="22" y="25" width="20" height="9" rx="2.5" fill="#FF4FA6" fillOpacity="0.24" stroke="#FF4FA6" strokeWidth="1.6" />
+        <line x1="27" y1="18" x2="27" y2="25" stroke={accent} strokeWidth="1.9" strokeLinecap="round" />
+        <line x1="37" y1="18" x2="37" y2="25" stroke={accent} strokeWidth="1.9" strokeLinecap="round" />
+        <circle cx="27" cy="15" r="2.2" fill="#FF922B" />
+        <circle cx="37" cy="15" r="2.2" fill="#FFD84D" />
+        <path d="M13 46H51" stroke={accent} strokeWidth="1.9" strokeLinecap="round" />
       </svg>
     );
   }
   if (kind === 'peony') {
     return (
       <svg viewBox="0 0 64 64" className="w-12 h-12" fill="none" aria-hidden="true">
-        <circle cx="32" cy="32" r="28" stroke="#D4AF37" strokeOpacity="0.45" strokeWidth="1.2" strokeDasharray="3 3" />
+        <circle cx="32" cy="32" r="28" stroke="#F5B82E" strokeOpacity="0.6" strokeWidth="1.4" strokeDasharray="3 3" />
         <path
           d="M32 20C36 20 39 24 39 28C43 28 46 31 46 35C46 39 42 42 38 42C36 45 28 45 26 42C22 42 18 39 18 35C18 31 21 28 25 28C25 24 28 20 32 20Z"
           fill={accent}
-          fillOpacity="0.16"
+          fillOpacity="0.18"
           stroke={accent}
-          strokeWidth="1.7"
+          strokeWidth="1.8"
         />
-        <circle cx="32" cy="33" r="5" fill="#D4AF37" fillOpacity="0.45" stroke="#D4AF37" strokeWidth="1.4" />
-        <path d="M32 45V51" stroke={accent} strokeWidth="1.6" strokeLinecap="round" />
+        <circle cx="32" cy="33" r="5" fill="#FFD84D" fillOpacity="0.6" stroke="#F5B82E" strokeWidth="1.5" />
+        <path d="M32 45V51" stroke={accent} strokeWidth="1.7" strokeLinecap="round" />
       </svg>
     );
   }
   return (
     <svg viewBox="0 0 64 64" className="w-12 h-12" fill="none" aria-hidden="true">
-      <circle cx="32" cy="32" r="28" stroke="#D4AF37" strokeOpacity="0.45" strokeWidth="1.2" strokeDasharray="3 3" />
+      <circle cx="32" cy="32" r="28" stroke="#F5B82E" strokeOpacity="0.6" strokeWidth="1.4" strokeDasharray="3 3" />
       <path
         d="M32 14L34.4 21.6L42 24L34.4 26.4L32 34L29.6 26.4L22 24L29.6 21.6L32 14Z"
-        fill="#D4AF37"
-        fillOpacity="0.32"
-        stroke="#D4AF37"
+        fill="#FFD84D"
+        fillOpacity="0.55"
+        stroke="#F59F00"
         strokeWidth="1.5"
         strokeLinejoin="round"
       />
-      <rect x="26" y="36" width="12" height="12" rx="2" fill={accent} fillOpacity="0.18" stroke={accent} strokeWidth="1.6" />
-      <path d="M22 48H42" stroke={accent} strokeWidth="1.8" strokeLinecap="round" />
+      <rect x="26" y="36" width="12" height="12" rx="2" fill={accent} fillOpacity="0.2" stroke={accent} strokeWidth="1.7" />
+      <path d="M22 48H42" stroke={accent} strokeWidth="1.9" strokeLinecap="round" />
     </svg>
   );
 }
@@ -192,31 +192,44 @@ function ScratchBlessingCard({
     canvas.width = w;
     canvas.height = h;
 
+    // Sparkling pink-gold-lavender glitter foil for an 11-year-old birthday surprise
     const grad = ctx.createLinearGradient(0, 0, w, h);
-    grad.addColorStop(0, '#D4AF37');
-    grad.addColorStop(0.5, '#E9CC6E');
-    grad.addColorStop(1, '#B8860B');
+    grad.addColorStop(0, '#FF62AF');
+    grad.addColorStop(0.5, '#F9D66B');
+    grad.addColorStop(1, '#B882FF');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
 
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.22)';
-    for (let i = 0; i < 36; i++) {
-      ctx.beginPath();
-      ctx.arc(
-        Math.random() * w,
-        Math.random() * h,
-        2 + Math.random() * 6,
-        0,
-        Math.PI * 2
-      );
-      ctx.fill();
+    // Draw tiny sparkle stars & glitter dots across the foil
+    for (let i = 0; i < 42; i++) {
+      const sx = Math.random() * w;
+      const sy = Math.random() * h;
+      const r = 2 + Math.random() * 5;
+      ctx.fillStyle = i % 3 === 0 ? 'rgba(255, 255, 255, 0.55)' : 'rgba(255, 248, 220, 0.34)';
+      if (i % 4 === 0) {
+        ctx.beginPath();
+        ctx.moveTo(sx, sy - r * 1.4);
+        ctx.lineTo(sx + r * 0.4, sy - r * 0.4);
+        ctx.lineTo(sx + r * 1.4, sy);
+        ctx.lineTo(sx + r * 0.4, sy + r * 0.4);
+        ctx.lineTo(sx, sy + r * 1.4);
+        ctx.lineTo(sx - r * 0.4, sy + r * 0.4);
+        ctx.lineTo(sx - r * 1.4, sy);
+        ctx.lineTo(sx - r * 0.4, sy - r * 0.4);
+        ctx.closePath();
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.arc(sx, sy, r * 0.65, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
 
     ctx.fillStyle = '#2D242C';
-    ctx.font = '600 15px "Plus Jakarta Sans", sans-serif';
+    ctx.font = '700 15px "Plus Jakarta Sans", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Scratch here to reveal', w / 2, h / 2 - 4);
-    ctx.font = '500 12px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('✦ Scratch here to reveal ✦', w / 2, h / 2 - 4);
+    ctx.font = '600 12px "Plus Jakarta Sans", sans-serif';
     ctx.fillText(card.label, w / 2, h / 2 + 18);
   }, [card.label]);
 
@@ -245,16 +258,16 @@ function ScratchBlessingCard({
 
   return (
     <div
-      className="relative h-52 rounded-2xl border border-[#EEDCE2] overflow-hidden shadow-xs p-6 flex flex-col justify-center text-center select-none"
-      style={{ backgroundColor: '#FFFFFF' }}
+      className="relative h-52 rounded-2xl border-2 border-[#F3CEE0] overflow-hidden shadow-xs p-6 flex flex-col justify-center text-center select-none"
+      style={{ backgroundColor: card.surfaceTint }}
     >
-      <p className="text-xs font-semibold uppercase tracking-widest text-[#C25975] mb-1">
+      <p className="text-xs font-semibold uppercase tracking-widest text-[#D81E78] mb-1">
         {card.label}
       </p>
       <h3 className="font-serif-display text-xl font-bold text-[#2D242C] mb-2">
         {card.title}
       </h3>
-      <p className="text-sm text-[#5A4A58] leading-relaxed">{card.blessing}</p>
+      <p className="text-sm text-[#4A3B48] leading-relaxed">{card.blessing}</p>
 
       <canvas
         ref={canvasRef}
@@ -292,11 +305,11 @@ export function BirthdaySurprises({ onCelebrate }: BirthdaySurprisesProps) {
       {/* Scratch-Off Blessings */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C25975] mb-2">
-            Golden Scratch-Off Surprises
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D81E78] mb-2">
+            Sparkly Glitter Scratch-Off Surprises
           </p>
           <h2 className="font-fancy text-2xl sm:text-4xl font-bold text-[#2D242C]">
-            Three Birthday Blessings for Simran
+            Three 11th Birthday Surprises for Simran
           </h2>
         </div>
         <button
@@ -305,9 +318,9 @@ export function BirthdaySurprises({ onCelebrate }: BirthdaySurprisesProps) {
             setRevealAll(true);
             onCelebrate();
           }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-[#E7D8DF] text-xs font-semibold text-[#2D242C] hover:bg-[#FFF5F7] transition-colors cursor-pointer w-fit whitespace-nowrap"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-[#F3CEE0] text-xs font-semibold text-[#2D242C] hover:bg-[#FFF0F7] transition-colors cursor-pointer w-fit whitespace-nowrap"
         >
-          <Gift className="w-3.5 h-3.5 text-[#C25975]" />
+          <Gift className="w-3.5 h-3.5 text-[#D81E78]" />
           <span>Reveal All Cards</span>
         </button>
       </div>
@@ -325,11 +338,11 @@ export function BirthdaySurprises({ onCelebrate }: BirthdaySurprisesProps) {
 
       {/* 3D Flip-Cards: Why Everyone Adores Khushi */}
       <div className="mb-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C25975] mb-2">
-          Interactive Keepsake Covers
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D81E78] mb-2">
+          Magical Flip-Card Keepsakes
         </p>
         <h2 className="font-fancy text-2xl sm:text-4xl font-bold text-[#2D242C]">
-          Why Everyone Adores Khushi Mama
+          Why Everyone Adores Our 11-Year-Old Star
         </h2>
       </div>
 
@@ -348,13 +361,13 @@ export function BirthdaySurprises({ onCelebrate }: BirthdaySurprisesProps) {
               }`}
             >
               <div className="flip-card-inner">
-                {/* Ornate Book-Cover Front */}
+                {/* Ornate Storybook-Cover Front */}
                 <div
-                  className={`flip-card-front relative rounded-2xl bg-gradient-to-br ${card.gradientClass} border border-[#E6CFD7] p-6 flex flex-col justify-between shadow-sm overflow-hidden`}
+                  className={`flip-card-front relative rounded-2xl bg-gradient-to-br ${card.gradientClass} border border-[#F3CEE0] p-6 flex flex-col justify-between shadow-sm overflow-hidden`}
                 >
                   {/* Delicate inner gilt frame */}
                   <div
-                    className="pointer-events-none absolute inset-2.5 rounded-xl border border-[#D4AF37]/40"
+                    className="pointer-events-none absolute inset-2.5 rounded-xl border border-[#F5B82E]/50"
                     aria-hidden="true"
                   />
 
@@ -369,32 +382,32 @@ export function BirthdaySurprises({ onCelebrate }: BirthdaySurprisesProps) {
                   </div>
 
                   <div className="relative z-10">
-                    <p className="font-editorial italic text-sm text-[#5A4A58] mb-0.5">
+                    <p className="font-editorial italic text-sm text-[#4A3B48] mb-0.5">
                       {card.frontSubtitle}
                     </p>
                     <h3 className="font-fancy text-lg font-bold text-[#2D242C] leading-snug">
                       {card.frontTitle}
                     </h3>
-                    <div className="mt-3 pt-2.5 border-t border-[#D4AF37]/25 flex items-center justify-between text-[11px] font-semibold tracking-wide text-[#5A4A58]">
-                      <span>Tap or hover to read</span>
+                    <div className="mt-3 pt-2.5 border-t border-[#F5B82E]/35 flex items-center justify-between text-[11px] font-semibold tracking-wide text-[#4A3B48]">
+                      <span>Tap or hover to flip</span>
                       <span style={{ color: card.accentColor }}>&rarr;</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Back */}
-                <div className="flip-card-back relative rounded-2xl bg-[#2D242C] text-[#FFFDF9] p-6 flex flex-col justify-between shadow-md">
+                <div className="flip-card-back relative rounded-2xl bg-gradient-to-br from-[#3D1D47] via-[#4D1E57] to-[#2D1A36] text-[#FFFDF9] p-6 flex flex-col justify-between shadow-md">
                   <div
-                    className="pointer-events-none absolute inset-2.5 rounded-xl border border-[#D4AF37]/30"
+                    className="pointer-events-none absolute inset-2.5 rounded-xl border border-[#FFD84D]/40"
                     aria-hidden="true"
                   />
-                  <span className="font-editorial italic text-sm text-[#D4AF37]">
+                  <span className="font-editorial italic text-sm text-[#FFD84D]">
                     {card.number} &middot; {card.frontTitle}
                   </span>
-                  <p className="font-editorial italic text-lg leading-relaxed text-[#F7E7CE]">
+                  <p className="font-editorial italic text-lg leading-relaxed text-[#FFF3FA]">
                     &ldquo;{card.backText}&rdquo;
                   </p>
-                  <span className="text-[11px] font-medium text-[#D4AF37]/80">
+                  <span className="text-[11px] font-medium text-[#FFD84D]/85">
                     Tap to flip back
                   </span>
                 </div>

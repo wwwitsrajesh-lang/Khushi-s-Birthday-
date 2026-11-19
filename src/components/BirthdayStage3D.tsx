@@ -52,9 +52,9 @@ const CAMERA_PRESETS: CameraPreset[] = [
 ];
 
 const GIFT_BLESSINGS = [
-  'Gift Box 1: Wishing Simran endless curiosity, bold dreams, and sunlit mornings!',
-  'Gift Box 2: May Khushi Mama always stay surrounded by laughter, music, and family warmth!',
-  'Gift Box 3: A lifetime of joyful travels, sweet surprises, and unforgettable 19th Novembers!',
+  'Gift Box 1: Happy 11th Birthday, Simran! Wishing you magical dreams, sparkling smiles, and super fun adventures!',
+  'Gift Box 2: May Khushi Mama always stay surrounded by music, giggles, best friends, and family love!',
+  'Gift Box 3: A lifetime of joyful surprises, rainbow days, and unforgettable 20th Novembers!',
 ];
 
 // Pre-allocated scratch math objects for zero-GC animation loop
@@ -156,6 +156,25 @@ function createContactShadowTexture(): THREE.CanvasTexture {
   grad.addColorStop(0, 'rgba(65, 40, 52, 0.45)');
   grad.addColorStop(0.55, 'rgba(65, 40, 52, 0.16)');
   grad.addColorStop(1, 'rgba(65, 40, 52, 0)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, size, size);
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+function createFlameGlowTexture(): THREE.CanvasTexture {
+  const size = 128;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d')!;
+  const grad = ctx.createRadialGradient(size / 2, size / 2, 2, size / 2, size / 2, size / 2);
+  grad.addColorStop(0, 'rgba(255, 250, 180, 1)');
+  grad.addColorStop(0.24, 'rgba(255, 212, 60, 0.88)');
+  grad.addColorStop(0.55, 'rgba(255, 128, 12, 0.45)');
+  grad.addColorStop(0.82, 'rgba(255, 72, 0, 0.14)');
+  grad.addColorStop(1, 'rgba(255, 60, 0, 0)');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, size, size);
   const tex = new THREE.CanvasTexture(canvas);
@@ -912,9 +931,13 @@ export function BirthdayStage3D({
     rimLight.position.set(-5.5, 4.5, -5.0);
     scene.add(rimLight);
 
-    const candlePointLight = new THREE.PointLight(0xffb347, 2.4, 7.5, 2);
-    candlePointLight.position.set(0, 2.55, 0);
+    const candlePointLight = new THREE.PointLight(0xff961e, 5.2, 10.5, 1.75);
+    candlePointLight.position.set(0, 2.38, 0.2);
     scene.add(candlePointLight);
+
+    const candleFrontLight = new THREE.PointLight(0xffca3a, 2.6, 7.5, 1.9);
+    candleFrontLight.position.set(0, 2.15, 0.72);
+    scene.add(candleFrontLight);
 
     // Procedural floor & contact shadow
     const maxAniso = renderer.capabilities.getMaxAnisotropy();
@@ -1349,32 +1372,61 @@ export function BirthdayStage3D({
     topper.scale.setScalar(0.84);
     cakeGroup.add(topper);
 
-    // 12. 5 Rainbow-Striped Party Candles + Flames + Smoke Puffs around Front Rim
+    // 12. 5 Rainbow-Striped Party Candles + Glowing Orange/Yellow Layered Flames + Halos + Smoke
     const candleStripeTex = createStripedCandleTexture(maxAniso);
+    const flameGlowTex = createFlameGlowTexture();
     const candleWaxMat = new THREE.MeshStandardMaterial({
       map: candleStripeTex,
       roughness: 0.42,
       metalness: 0.04,
     });
-    const flameMat = new THREE.MeshStandardMaterial({
-      color: 0xffe484,
-      emissive: new THREE.Color(0xff9d1c),
-      emissiveIntensity: 2.6,
-      roughness: 0.2,
+    const outerFlameMat = new THREE.MeshStandardMaterial({
+      color: 0xff7300,
+      emissive: new THREE.Color(0xff5500),
+      emissiveIntensity: 3.6,
+      roughness: 0.15,
+      transparent: true,
+      opacity: 0.92,
+      toneMapped: false,
     });
-    const flameProfile = [
+    const innerFlameMat = new THREE.MeshStandardMaterial({
+      color: 0xfff37a,
+      emissive: new THREE.Color(0xffdd22),
+      emissiveIntensity: 4.8,
+      roughness: 0.1,
+      toneMapped: false,
+    });
+    const flameGlowMat = new THREE.SpriteMaterial({
+      map: flameGlowTex,
+      color: 0xffbe42,
+      transparent: true,
+      opacity: 0.92,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      toneMapped: false,
+    });
+
+    const outerFlameProfile = [
       new THREE.Vector2(0, 0),
-      new THREE.Vector2(0.026, 0.028),
-      new THREE.Vector2(0.02, 0.07),
-      new THREE.Vector2(0.008, 0.105),
-      new THREE.Vector2(0, 0.12),
+      new THREE.Vector2(0.036, 0.036),
+      new THREE.Vector2(0.032, 0.088),
+      new THREE.Vector2(0.014, 0.145),
+      new THREE.Vector2(0, 0.175),
     ];
-    const flameGeo = new THREE.LatheGeometry(flameProfile, 14);
+    const innerFlameProfile = [
+      new THREE.Vector2(0, 0.008),
+      new THREE.Vector2(0.022, 0.034),
+      new THREE.Vector2(0.017, 0.078),
+      new THREE.Vector2(0.006, 0.115),
+      new THREE.Vector2(0, 0.128),
+    ];
+    const outerFlameGeo = new THREE.LatheGeometry(outerFlameProfile, 16);
+    const innerFlameGeo = new THREE.LatheGeometry(innerFlameProfile, 14);
     const candleGeo = new THREE.CylinderGeometry(0.022, 0.024, 0.22, 14);
     const wickGeo = new THREE.CylinderGeometry(0.004, 0.004, 0.03, 8);
     const wickMat = new THREE.MeshStandardMaterial({ color: 0x2d242c, roughness: 0.9 });
 
-    const flameMeshes: THREE.Mesh[] = [];
+    const flameGroups: Array<{ group: THREE.Group; halo: THREE.Sprite; phase: number }> = [];
     const smokeMeshes: Array<{ mesh: THREE.Mesh; basePos: THREE.Vector3; phase: number }> = [];
     const smokeGeo = new THREE.SphereGeometry(0.032, 10, 8);
     const smokeMat = new THREE.MeshStandardMaterial({
@@ -1400,11 +1452,20 @@ export function BirthdayStage3D({
       wick.position.set(cx, 2.21, cz);
       cakeGroup.add(wick);
 
-      const flame = new THREE.Mesh(flameGeo, flameMat);
-      flame.position.set(cx, 2.225, cz);
-      flame.userData.phase = idx * 1.3;
-      cakeGroup.add(flame);
-      flameMeshes.push(flame);
+      const flameGroup = new THREE.Group();
+      flameGroup.position.set(cx, 2.222, cz);
+
+      const outerFlame = new THREE.Mesh(outerFlameGeo, outerFlameMat);
+      const innerFlame = new THREE.Mesh(innerFlameGeo, innerFlameMat);
+      flameGroup.add(outerFlame, innerFlame);
+
+      const halo = new THREE.Sprite(flameGlowMat);
+      halo.position.set(0, 0.075, 0);
+      halo.scale.set(0.38, 0.42, 1);
+      flameGroup.add(halo);
+
+      cakeGroup.add(flameGroup);
+      flameGroups.push({ group: flameGroup, halo, phase: idx * 1.3 });
 
       const smoke = new THREE.Mesh(smokeGeo, smokeMat.clone());
       smoke.position.set(cx, 2.28, cz);
@@ -1781,23 +1842,32 @@ export function BirthdayStage3D({
       }
       controls.update();
 
-      // 2. Candle flames & light damping
-      const targetLightIntensity = litNow ? 2.3 + Math.sin(elapsed * 9) * 0.22 : 0;
+      // 2. Radiant orange & yellow candle flames + warm light damping
+      const flicker = Math.sin(elapsed * 11) * 0.45 + Math.cos(elapsed * 17) * 0.22;
+      const targetLightIntensity = litNow ? 5.2 + flicker : 0;
+      const targetFrontIntensity = litNow ? 2.6 + flicker * 0.45 : 0;
       candlePointLight.intensity = THREE.MathUtils.damp(
         candlePointLight.intensity,
         targetLightIntensity,
         10,
         dt
       );
+      candleFrontLight.intensity = THREE.MathUtils.damp(
+        candleFrontLight.intensity,
+        targetFrontIntensity,
+        10,
+        dt
+      );
 
-      flameMeshes.forEach((flame) => {
-        const phase = Number(flame.userData.phase || 0);
+      flameGroups.forEach(({ group, halo, phase }) => {
         const targetScale = litNow ? 1 : 0.001;
-        const nextScale = THREE.MathUtils.damp(flame.scale.y, targetScale, 12, dt);
-        const wobble = litNow ? 1 + Math.sin(elapsed * 11 + phase) * 0.12 : 1;
-        flame.scale.set(nextScale, nextScale * wobble, nextScale);
-        flame.rotation.z = litNow ? Math.sin(elapsed * 8 + phase) * 0.14 : 0;
-        flame.visible = nextScale > 0.03;
+        const nextScale = THREE.MathUtils.damp(group.scale.x, targetScale, 12, dt);
+        const wobble = litNow ? 1 + Math.sin(elapsed * 12 + phase) * 0.14 : 1;
+        const glowPulse = litNow ? 1 + Math.sin(elapsed * 14 + phase * 1.4) * 0.12 : 0.01;
+        group.scale.set(nextScale, nextScale * wobble, nextScale);
+        group.rotation.z = litNow ? Math.sin(elapsed * 9 + phase) * 0.14 : 0;
+        halo.scale.set(0.38 * glowPulse, 0.44 * glowPulse, 1);
+        group.visible = nextScale > 0.03;
       });
 
       // Smoke puffs rising after blowout
@@ -1899,6 +1969,7 @@ export function BirthdayStage3D({
       plaqueTex.dispose();
       barbieFaceTex.dispose();
       candleStripeTex.dispose();
+      flameGlowTex.dispose();
       renderer.dispose();
       if (renderer.domElement.parentNode === container) {
         container.removeChild(renderer.domElement);
@@ -1934,27 +2005,36 @@ export function BirthdayStage3D({
       {/* Transparent Top-Left Hero Typography Overlay so the 3D cake stays 100% visible */}
       <div className="pointer-events-none absolute top-4 left-4 sm:top-7 sm:left-8 z-10 max-w-sm">
         <div className="pointer-events-auto bg-transparent border-transparent shadow-none px-1 py-1">
-          <p className="text-xs font-semibold tracking-wider text-[#C25975] mb-1 drop-shadow-[0_1px_4px_rgba(255,253,249,0.95)]">
-            19th November Celebration &middot; Khushi Mama
+          <p className="text-xs font-semibold tracking-wider text-[#D81E78] mb-1 drop-shadow-[0_1px_4px_rgba(255,253,249,0.95)]">
+            20th November &middot; Turning 11! &middot; Khushi Mama
           </p>
           <h1 className="font-fancy text-2xl sm:text-4xl font-bold text-[#2D242C] leading-tight text-balance drop-shadow-[0_1px_6px_rgba(255,253,249,0.95)]">
-            Happy Birthday, <span className="font-script text-4xl sm:text-5xl gold-foil inline-block align-baseline">Simran</span>
+            Happy 11th Birthday,{' '}
+            <span className="font-script text-4xl sm:text-5xl barbie-shimmer inline-block align-baseline">
+              Simran
+            </span>
           </h1>
           <p className="font-editorial italic text-base sm:text-lg text-[#4A3B48] mt-1 drop-shadow-[0_1px_4px_rgba(255,253,249,0.95)]">
-            Our dearest Khushi &mdash; tap the 3D candles or gift boxes!
+            Our sweet 11-year-old star Khushi &mdash; tap the glowing candles or gifts!
           </p>
-          <div className="mt-2.5 pt-2.5 border-t border-[#D4AF37]/30 flex flex-wrap items-center justify-between gap-3">
+          <div className="mt-2.5 pt-2.5 border-t border-[#EC2C88]/25 flex flex-wrap items-center justify-between gap-3">
             <div className="text-xs text-[#4A3B48] tabular-nums font-medium drop-shadow-[0_1px_4px_rgba(255,253,249,0.95)]">
               {isBirthdayToday ? (
-                <span className="font-semibold text-[#C25975]">It is 19th November — Party Time!</span>
+                <span className="inline-flex items-center gap-1.5 font-bold text-[#D81E78]">
+                  <span className="date-sparkle text-[#F5B82E]" aria-hidden="true">✦</span>
+                  <span>20-11-2026 &mdash; Happy 11th Birthday!</span>
+                  <span className="date-sparkle text-[#A86DF5]" aria-hidden="true">✦</span>
+                </span>
               ) : (
-                <span>Countdown: <strong className="text-[#2D242C]">{countdownLabel}</strong></span>
+                <span>
+                  Countdown: <strong className="text-[#2D242C]">{countdownLabel}</strong>
+                </span>
               )}
             </div>
             <button
               type="button"
               onClick={onScrollToMemories}
-              className="text-xs font-semibold text-[#C25975] hover:text-[#2D242C] transition-colors cursor-pointer whitespace-nowrap drop-shadow-[0_1px_4px_rgba(255,253,249,0.95)]"
+              className="text-xs font-semibold text-[#D81E78] hover:text-[#2D242C] transition-colors cursor-pointer whitespace-nowrap drop-shadow-[0_1px_4px_rgba(255,253,249,0.95)]"
             >
               Memories &amp; Wishes &darr;
             </button>
@@ -1968,15 +2048,15 @@ export function BirthdayStage3D({
           type="button"
           onClick={() => setDockCollapsed((prev) => !prev)}
           aria-expanded={!dockCollapsed}
-          className="pointer-events-auto mb-1.5 px-3.5 py-1 rounded-t-xl rounded-b-md bg-[#FFFDF9]/95 border border-[#E9D7DD] text-[11px] font-semibold text-[#5A4A58] hover:text-[#2D242C] shadow-sm transition-colors cursor-pointer whitespace-nowrap"
+          className="pointer-events-auto mb-1.5 px-3.5 py-1 rounded-t-xl rounded-b-md bg-[#FFFDF9]/95 border border-[#F3CEE0] text-[11px] font-semibold text-[#5A4A58] hover:text-[#D81E78] shadow-sm transition-colors cursor-pointer whitespace-nowrap"
         >
           {dockCollapsed ? '▴ Show 3D Controls' : '▾ Hide Controls'}
         </button>
 
         {!dockCollapsed && (
-          <div className="pointer-events-auto rounded-2xl bg-[#FFFDF9]/95 border border-[#E9D7DD] px-3 py-2 sm:px-4 sm:py-2.5 shadow-lg flex flex-wrap items-center justify-center gap-2">
+          <div className="pointer-events-auto rounded-2xl bg-[#FFFDF9]/95 border border-[#F3CEE0] px-3 py-2 sm:px-4 sm:py-2.5 shadow-lg flex flex-wrap items-center justify-center gap-2">
             {/* Camera Presets */}
-            <div className="flex items-center gap-1 bg-[#F6ECEF] p-1 rounded-xl">
+            <div className="flex items-center gap-1 bg-[#FCEAF4] p-1 rounded-xl">
               {CAMERA_PRESETS.map((preset) => (
                 <button
                   key={preset.id}
@@ -1984,7 +2064,7 @@ export function BirthdayStage3D({
                   onClick={() => handleSelectPreset(preset.id)}
                   className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                     activePreset === preset.id
-                      ? 'bg-white text-[#2D242C] shadow-xs'
+                      ? 'bg-white text-[#D81E78] shadow-xs'
                       : 'text-[#5A4A58] hover:text-[#2D242C]'
                   }`}
                 >
@@ -1993,7 +2073,7 @@ export function BirthdayStage3D({
               ))}
             </div>
 
-            <div className="hidden sm:block w-px h-6 bg-[#E9D7DD]" aria-hidden="true" />
+            <div className="hidden sm:block w-px h-6 bg-[#F3CEE0]" aria-hidden="true" />
 
             {/* Interactive Candle & Celebration Actions */}
             <div className="flex items-center gap-2">
@@ -2017,7 +2097,7 @@ export function BirthdayStage3D({
                   burstTriggerRef.current?.();
                   onCelebrate();
                 }}
-                className="px-3.5 py-1.5 rounded-xl bg-[#C25975] text-white text-xs font-semibold hover:bg-[#A9445F] transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#EC2C88] to-[#A86DF5] text-white text-xs font-semibold hover:brightness-105 transition-all cursor-pointer whitespace-nowrap shrink-0"
               >
                 🎆 Fireworks
               </button>
@@ -2027,8 +2107,8 @@ export function BirthdayStage3D({
                 onClick={onToggleMusic}
                 className={`px-3 py-1.5 rounded-xl border text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                   isMusicPlaying
-                    ? 'bg-[#FFF0F4] border-[#C25975] text-[#C25975]'
-                    : 'bg-white border-[#E9D7DD] text-[#5A4A58] hover:text-[#2D242C]'
+                    ? 'bg-[#FFEAF5] border-[#EC2C88] text-[#D81E78]'
+                    : 'bg-white border-[#F3CEE0] text-[#5A4A58] hover:text-[#D81E78]'
                 }`}
               >
                 {isMusicPlaying ? '🎵 Pause Song' : '🎵 Play Birthday Song'}

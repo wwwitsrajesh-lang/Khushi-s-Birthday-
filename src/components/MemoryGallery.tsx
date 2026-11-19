@@ -254,14 +254,14 @@ export function MemoryGallery({
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#C25975] mb-2">
-            Permanent Celebration Vault
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D81E78] mb-2">
+            Simran’s 11th Birthday Memory Vault
           </p>
           <h2 className="font-fancy text-3xl sm:text-4xl font-bold text-[#2D242C] text-balance">
             Photos &amp; Videos for Khushi
           </h2>
           <p className="text-sm sm:text-base text-[#5A4A58] mt-2 max-w-2xl">
-            Every photo and video shared here is saved permanently on the site so Simran and the family can revisit every smile anytime.
+            Every photo and video shared here is saved permanently so our 11-year-old star Simran and the family can revisit every smile anytime.
           </p>
         </div>
 
@@ -270,16 +270,16 @@ export function MemoryGallery({
             <button
               type="button"
               onClick={() => setLightboxIndex(0)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-[#E7D8DF] text-xs font-semibold text-[#2D242C] hover:bg-[#FFF5F7] transition-colors cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-[#F3CEE0] text-xs font-semibold text-[#2D242C] hover:bg-[#FFF0F7] transition-colors cursor-pointer whitespace-nowrap"
             >
-              <Play className="w-3.5 h-3.5 text-[#C25975]" />
+              <Play className="w-3.5 h-3.5 text-[#D81E78]" />
               <span>Start Slideshow</span>
             </button>
           )}
           <button
             type="button"
             onClick={() => setShowUploadForm((prev) => !prev)}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#C25975] text-white text-xs font-semibold hover:bg-[#A9445F] transition-colors cursor-pointer shadow-sm whitespace-nowrap"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#EC2C88] to-[#A86DF5] text-white text-xs font-semibold hover:brightness-105 transition-all cursor-pointer shadow-sm whitespace-nowrap"
           >
             <Upload className="w-3.5 h-3.5" />
             <span>{showUploadForm ? 'Hide Upload Box' : 'Add Photo or Video'}</span>
@@ -292,7 +292,7 @@ export function MemoryGallery({
         {showUploadForm && (
           <form
             onSubmit={handleSubmit}
-            className="mb-12 rounded-3xl bg-white border border-[#EBD8DF] p-6 sm:p-8 shadow-sm"
+            className="mb-12 rounded-3xl bg-white border border-[#F3CEE0] p-6 sm:p-8 shadow-sm"
           >
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
               {/* Dropzone / Media Picker */}
@@ -304,7 +304,7 @@ export function MemoryGallery({
                     e.preventDefault();
                     handleFilePick(e.dataTransfer.files?.[0]);
                   }}
-                  className="flex-1 min-h-[240px] rounded-2xl border-2 border-dashed border-[#DFB9C5] bg-[#FFF8FA] hover:bg-[#FFF2F6] transition-colors flex flex-col items-center justify-center p-5 text-center cursor-pointer overflow-hidden relative"
+                  className="flex-1 min-h-[240px] rounded-2xl border-2 border-dashed border-[#F0AED0] bg-[#FFF4FA] hover:bg-[#FFEAF5] transition-colors flex flex-col items-center justify-center p-5 text-center cursor-pointer overflow-hidden relative"
                 >
                   {previewUrl ? (
                     previewKind === 'video' ? (
@@ -324,7 +324,7 @@ export function MemoryGallery({
                     )
                   ) : (
                     <>
-                      <div className="w-12 h-12 rounded-full bg-[#FFE6EE] text-[#C25975] flex items-center justify-center mb-3">
+                      <div className="w-12 h-12 rounded-full bg-[#FFDDF0] text-[#D81E78] flex items-center justify-center mb-3">
                         <Camera className="w-5 h-5" />
                       </div>
                       <p className="text-sm font-semibold text-[#2D242C]">
@@ -368,7 +368,7 @@ export function MemoryGallery({
                       onChange={(e) => setAuthorName(e.target.value)}
                       placeholder="e.g., Riya Masi"
                       maxLength={80}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#FFFDF9] border border-[#E5D3DA] text-sm text-[#2D242C] focus:outline-none focus:border-[#C25975]"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#FFFDF9] border border-[#F0C8DC] text-sm text-[#2D242C] focus:outline-none focus:border-[#EC2C88]"
                     />
                   </div>
                   <div>
@@ -385,7 +385,7 @@ export function MemoryGallery({
                       onChange={(e) => setRelation(e.target.value)}
                       placeholder="e.g., Cousin, Best Friend, Nephew"
                       maxLength={60}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#FFFDF9] border border-[#E5D3DA] text-sm text-[#2D242C] focus:outline-none focus:border-[#C25975]"
+                      className="w-full px-4 py-2.5 rounded-xl bg-[#FFFDF9] border border-[#F0C8DC] text-sm text-[#2D242C] focus:outline-none focus:border-[#EC2C88]"
                     />
                   </div>
                 </div>
@@ -404,7 +404,7 @@ export function MemoryGallery({
                     onChange={(e) => setCaption(e.target.value)}
                     placeholder="Share the story behind this photo or video for Khushi Mama..."
                     maxLength={320}
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#FFFDF9] border border-[#E5D3DA] text-sm text-[#2D242C] focus:outline-none focus:border-[#C25975]"
+                    className="w-full px-4 py-2.5 rounded-xl bg-[#FFFDF9] border border-[#F0C8DC] text-sm text-[#2D242C] focus:outline-none focus:border-[#EC2C88]"
                   />
                 </div>
 
@@ -444,8 +444,8 @@ export function MemoryGallery({
       </div>
 
       {/* Filter & Mood Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-[#EFE1E6]">
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-[#F6ECEF] w-fit overflow-x-auto">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 mb-8 border-b border-[#F3CEE0]">
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-[#FCEAF4] w-fit overflow-x-auto">
           {(
             [
               { id: 'all', label: `All (${memories.length})` },
@@ -466,7 +466,7 @@ export function MemoryGallery({
               onClick={() => setFilter(tab.id)}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                 filter === tab.id
-                  ? 'bg-white text-[#2D242C] shadow-xs'
+                  ? 'bg-white text-[#D81E78] shadow-xs'
                   : 'text-[#5A4A58] hover:text-[#2D242C]'
               }`}
             >
@@ -485,8 +485,8 @@ export function MemoryGallery({
               onClick={() => setPhotoFilter(pf.id)}
               className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                 photoFilter === pf.id
-                  ? 'bg-[#2D242C] text-white'
-                  : 'text-[#5A4A58] hover:bg-[#F6ECEF]'
+                  ? 'bg-[#EC2C88] text-white'
+                  : 'text-[#5A4A58] hover:bg-[#FCEAF4]'
               }`}
             >
               {pf.label}
@@ -509,8 +509,8 @@ export function MemoryGallery({
           ))}
         </div>
       ) : filteredMemories.length === 0 ? (
-        <div className="rounded-3xl bg-white border border-[#EFE1E6] p-12 text-center">
-          <Film className="w-8 h-8 text-[#C25975] mx-auto mb-3" />
+        <div className="rounded-3xl bg-white border border-[#F3CEE0] p-12 text-center">
+          <Film className="w-8 h-8 text-[#D81E78] mx-auto mb-3" />
           <h3 className="font-serif-display text-xl font-bold text-[#2D242C] mb-1">
             No {filter === 'video' ? 'videos' : 'memories'} here yet
           </h3>
@@ -520,7 +520,7 @@ export function MemoryGallery({
           <button
             type="button"
             onClick={() => setShowUploadForm(true)}
-            className="px-5 py-2.5 rounded-xl bg-[#C25975] text-white text-xs font-semibold hover:bg-[#A9445F] cursor-pointer"
+            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#EC2C88] to-[#A86DF5] text-white text-xs font-semibold hover:brightness-105 cursor-pointer"
           >
             Add Photo or Video
           </button>
@@ -532,13 +532,13 @@ export function MemoryGallery({
             return (
               <article
                 key={item.id}
-                className="break-inside-avoid group rounded-2xl bg-white border border-[#EFE1E6] p-3.5 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between"
+                className="break-inside-avoid group rounded-2xl bg-white border border-[#F3CEE0] p-3.5 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between"
               >
                 <div>
                   <button
                     type="button"
                     onClick={() => setLightboxIndex(idx)}
-                    className="relative block w-full rounded-xl overflow-hidden bg-[#F9F0F3] cursor-pointer text-left"
+                    className="relative block w-full rounded-xl overflow-hidden bg-[#FFF2F8] cursor-pointer text-left"
                   >
                     {item.kind === 'video' ? (
                       <div className="relative w-full bg-[#1F171E]">
@@ -550,14 +550,14 @@ export function MemoryGallery({
                           className="w-full h-auto block"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent flex items-center justify-center">
-                          <span className="w-14 h-14 rounded-full bg-white/95 text-[#C25975] flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+                          <span className="w-14 h-14 rounded-full bg-white/95 text-[#EC2C88] flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
                             <Play className="w-6 h-6 fill-current ml-0.5" />
                           </span>
                         </div>
                       </div>
                     ) : isBroken ? (
-                      <div className="w-full aspect-[3/4] flex flex-col items-center justify-center p-4 bg-gradient-to-br from-[#FFE8EF] to-[#F7E7CE] text-center">
-                        <Camera className="w-7 h-7 text-[#C25975] mb-2" />
+                      <div className="w-full aspect-[3/4] flex flex-col items-center justify-center p-4 bg-gradient-to-br from-[#FFE8F4] to-[#FFF4D6] text-center">
+                        <Camera className="w-7 h-7 text-[#D81E78] mb-2" />
                         <span className="text-xs font-medium text-[#2D242C]">
                           {item.caption}
                         </span>
@@ -578,7 +578,7 @@ export function MemoryGallery({
                   {editingId === item.id ? (
                     <form
                       onSubmit={(e) => void handleSaveEdit(e, item.id)}
-                      className="mt-3 pt-3 border-t border-[#EFE1E6] space-y-2.5 px-1"
+                      className="mt-3 pt-3 border-t border-[#F3CEE0] space-y-2.5 px-1"
                     >
                       <div className="grid grid-cols-2 gap-2">
                         <input
@@ -588,7 +588,7 @@ export function MemoryGallery({
                           placeholder="Your Name"
                           maxLength={80}
                           aria-label="Edit author name"
-                          className="w-full px-3 py-1.5 rounded-lg bg-[#FFFDF9] border border-[#E5D3DA] text-xs text-[#2D242C] focus:outline-none focus:border-[#C25975]"
+                          className="w-full px-3 py-1.5 rounded-lg bg-[#FFFDF9] border border-[#F0C8DC] text-xs text-[#2D242C] focus:outline-none focus:border-[#EC2C88]"
                         />
                         <input
                           type="text"
@@ -597,7 +597,7 @@ export function MemoryGallery({
                           placeholder="Relation"
                           maxLength={60}
                           aria-label="Edit relation"
-                          className="w-full px-3 py-1.5 rounded-lg bg-[#FFFDF9] border border-[#E5D3DA] text-xs text-[#2D242C] focus:outline-none focus:border-[#C25975]"
+                          className="w-full px-3 py-1.5 rounded-lg bg-[#FFFDF9] border border-[#F0C8DC] text-xs text-[#2D242C] focus:outline-none focus:border-[#EC2C88]"
                         />
                       </div>
                       <textarea
@@ -607,10 +607,10 @@ export function MemoryGallery({
                         placeholder="Edit memory caption..."
                         maxLength={320}
                         aria-label="Edit memory caption"
-                        className="w-full px-3 py-1.5 rounded-lg bg-[#FFFDF9] border border-[#E5D3DA] text-xs text-[#2D242C] focus:outline-none focus:border-[#C25975]"
+                        className="w-full px-3 py-1.5 rounded-lg bg-[#FFFDF9] border border-[#F0C8DC] text-xs text-[#2D242C] focus:outline-none focus:border-[#EC2C88]"
                       />
                       <div className="flex items-center justify-between gap-2">
-                        <label className="text-[11px] font-semibold text-[#C25975] hover:text-[#A9445F] cursor-pointer truncate">
+                        <label className="text-[11px] font-semibold text-[#D81E78] hover:text-[#B51763] cursor-pointer truncate">
                           <span>
                             {editFile ? `New file: ${editFile.name}` : 'Replace photo/video (optional)'}
                           </span>
@@ -634,14 +634,14 @@ export function MemoryGallery({
                         <button
                           type="button"
                           onClick={cancelEditing}
-                          className="px-3 py-1 rounded-lg border border-[#E5D3DA] text-xs font-medium text-[#5A4A58] hover:text-[#2D242C] cursor-pointer"
+                          className="px-3 py-1 rounded-lg border border-[#F0C8DC] text-xs font-medium text-[#5A4A58] hover:text-[#2D242C] cursor-pointer"
                         >
                           Cancel
                         </button>
                         <button
                           type="submit"
                           disabled={isSavingEdit}
-                          className="px-3.5 py-1 rounded-lg bg-[#C25975] text-white text-xs font-semibold hover:bg-[#A9445F] disabled:opacity-60 cursor-pointer"
+                          className="px-3.5 py-1 rounded-lg bg-[#EC2C88] text-white text-xs font-semibold hover:bg-[#D01E74] disabled:opacity-60 cursor-pointer"
                         >
                           {isSavingEdit ? 'Saving...' : 'Save'}
                         </button>
@@ -651,7 +651,7 @@ export function MemoryGallery({
                     <>
                       {/* Clean unboxed metadata row (zero-pill discipline) */}
                       <div className="flex items-center gap-2 text-xs text-[#5A4A58] mt-3 px-1">
-                        <span className="font-semibold text-[#C25975]">
+                        <span className="font-semibold text-[#D81E78]">
                           {item.kind === 'video' ? 'Video' : 'Photo'}
                         </span>
                         <span aria-hidden="true">&middot;</span>
@@ -667,7 +667,7 @@ export function MemoryGallery({
                   )}
                 </div>
 
-                <div className="flex items-center justify-between gap-2 mt-4 pt-3 border-t border-[#F4EAEF] px-1">
+                <div className="flex items-center justify-between gap-2 mt-4 pt-3 border-t border-[#F7E0EC] px-1">
                   <span className="text-xs text-[#5A4A58] truncate">{item.relation}</span>
                   <div className="flex items-center gap-1.5 shrink-0">
                     <button
@@ -676,7 +676,7 @@ export function MemoryGallery({
                         editingId === item.id ? cancelEditing() : startEditing(item)
                       }
                       aria-label={`Edit memory by ${item.authorName}`}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-[#F6ECEF] text-xs font-medium text-[#5A4A58] hover:text-[#2D242C] transition-colors cursor-pointer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg hover:bg-[#FFF0F7] text-xs font-medium text-[#5A4A58] hover:text-[#D81E78] transition-colors cursor-pointer"
                     >
                       <Pencil className="w-3 h-3" />
                       <span>Edit</span>
@@ -685,9 +685,9 @@ export function MemoryGallery({
                       type="button"
                       onClick={() => void onHeartMemory(item.id)}
                       aria-label={`Send heart to memory by ${item.authorName}`}
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-[#FFF0F4] text-xs font-semibold text-[#C25975] transition-colors cursor-pointer tabular-nums"
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-[#FFEAF5] text-xs font-semibold text-[#D81E78] transition-colors cursor-pointer tabular-nums"
                     >
-                      <Heart className="w-3.5 h-3.5 fill-[#C25975]" />
+                      <Heart className="w-3.5 h-3.5 fill-[#EC2C88] text-[#EC2C88]" />
                       <span>{item.hearts}</span>
                     </button>
                   </div>

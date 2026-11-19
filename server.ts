@@ -116,7 +116,7 @@ function ensureStorageReady(): void {
           relation: 'Grandparents',
           sticker: '💐',
           message:
-            'Endless blessings on 19th November, beta. May good health, wisdom, courage, and joyful milestones always walk beside you.',
+            'Endless blessings on 20th November, beta. Happy 11th Birthday! May good health, wisdom, courage, and joyful milestones always walk beside you.',
           createdAt: '2026-11-16T07:10:00.000Z',
           hearts: 21,
         },
